@@ -22,6 +22,7 @@ variable "project_id" {
 variable "network_name" {
   description = "The name of the network being created"
   type        = string
+  default     = "hardened-vpc"
 }
 
 variable "routing_mode" {
@@ -56,6 +57,16 @@ variable "subnets" {
     ipv6_access_type                 = optional(string)
   }))
   description = "The list of subnets being created"
+  default = [{
+    subnet_name   = "secure-subnet"
+    subnet_ip     = "10.0.0.0/24"
+    subnet_region = "us-central1"
+  },
+  {
+    subnet_name   = "open-subnet"
+    subnet_ip     = "10.1.0.0/24"
+    subnet_region = "us-central1"
+  }]
 }
 
 variable "secondary_ranges" {
