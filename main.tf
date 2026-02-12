@@ -19,7 +19,7 @@
  *****************************************/
 module "vpc" {
   source                                    = "./modules/vpc"
-  network_name                              = "hardenended vpc"
+  network_name                              = var.network_name
   auto_create_subnetworks                   = var.auto_create_subnetworks
   routing_mode                              = var.routing_mode
   project_id                                = var.project_id
@@ -43,13 +43,7 @@ module "subnets" {
   source           = "./modules/subnets"
   project_id       = var.project_id
   network_name     = module.vpc.network_name
-  subnets = [
-    {
-      subnet_name   = "secure-subnet"
-      subnet_ip     = "10.0.0.0/24"
-      subnet_region = "us-central1"
-    }
-  ]
+  subnets          = var.subnets
   secondary_ranges = var.secondary_ranges
 }
 
@@ -60,14 +54,7 @@ module "routes" {
   source            = "./modules/routes"
   project_id        = var.project_id
   network_name      = module.vpc.network_name
-  routes = [
-    {
-      name              = "custom-route"
-      destination_range = "10.0.0.0/24"
-      next_hop_internet = "true"
-      tags              = ""
-    }
-  ]
+  routes            = var.routes
   module_depends_on = [module.subnets.subnets]
 }
 
